@@ -1,0 +1,5 @@
+output
+phrase-testnet.prv
+tx.build
+tx.sign
+.env
