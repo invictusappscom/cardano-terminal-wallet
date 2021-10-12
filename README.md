@@ -25,3 +25,4 @@ You will need also cardano-cli which can be downloaded [Here](https://github.com
 6. Send native tokens or NFTs with script `./send-token`
 [![asciicast](https://asciinema.org/a/bfLwieUvClqKd8RJ8s7wLGAlD.svg)](https://asciinema.org/a/bfLwieUvClqKd8RJ8s7wLGAlD)
 7. Mint NFT with plutus using script `./mint-plutus-nft`. Script must be generated with https://github.com/jfischoff/plutus-nft and copied to `plutus/nft-mint-policy.plutus`
+[![asciicast](https://asciinema.org/a/03lqEIC34mJAtiKKL8bkbewsK.svg)](https://asciinema.org/a/03lqEIC34mJAtiKKL8bkbewsK)

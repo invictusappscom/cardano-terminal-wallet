@@ -2,11 +2,15 @@
 
 source .env
 
-echo "Existing wallets:"
-ls -1 output
-echo ""
+WALLET=$1
 
-read -p "Wallet name from list: " WALLET
+if [ -z "$WALLET" ];then
+    echo "Existing wallets:"
+    ls -1 output
+    echo ""
+
+    read -p "Wallet name from list: " WALLET
+fi
 
 set -e
 
