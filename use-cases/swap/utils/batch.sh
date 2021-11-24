@@ -2,13 +2,16 @@ echo "Building Tx ..."
 set -xe
 
 POOL_UTXO=4cf7df47e1aa8303380aa4dde4b83545c48e6094fea6735a9885e9e784e6d80d#1
-# SwapTokens taken from Swap Orders which goes to the script
-SWAP_TOKENS_END_VALUE=200
+# SwapTokens taken from Swap Orders which goes to the script or it can be burned
+SWAP_TOKENS_END_VALUE=$((10000000 + 200))
 # Lovalace taken from Swap Orders which goes to the script, also fee needs to be included (after first start it will be error missing ada eg -202067)
 ADA_IN=$(( 1900000  + 50000000 + 27000000 ))
-ADA_OUT=$(( 1400000 + 14000000 + 205543 + 1889703 ))
+ADA_OUT=$(( 10000000 + 1400000 + 14000000 + 205543 ))
 LOVELACE_END_VALUE=$(($ADA_IN - $ADA_OUT))
-RTOKEN_END_VALUE=$((540 - 200))
+
+RTOKEN_IN=$((540 + 200))
+RTOKEN_OUT=200
+RTOKEN_END_VALUE=$(($RTOKEN_IN - $RTOKEN_OUT))
 
 BURN_SWAP_TOKENS=(--mint "-$SWAP_TOKENS_END_VALUE $SWAPTOKEN_POLICY_ID_NAME" --mint-script-file $POLICY_SCRIPT)
 # or
@@ -18,6 +21,12 @@ SEND_SWAPTOKENS_TO_ISSUER=(--tx-out $MY_ADDR+14000000+"$SWAP_TOKENS_END_VALUE $S
 ${CARDANO_CLI_PATH} transaction build \
   --alonzo-era \
   $NETWORK \
+  \
+  --tx-in ca60ad59ae9df6b3188d9c6b8545723a973695e58dc5aab6c5edf3b6611a10b5#1 \
+  --tx-in-script-file $SCRIPT \
+  --tx-in-datum-value '["addr_test1qzxvxzjkpz4lqcrqse8zz3zpmxlzxcnf90p9lksjae2fl0dtqdv4sr","f98l7l6km72a5jlwngmvcj6xz2yv33cf8j0jdsetflek"]' \
+  --tx-in-redeemer-value 1 \
+  --tx-out addr_test1qzxvxzjkpz4lqcrqse8zz3zpmxlzxcnf90p9lksjae2fl0dtqdv4srf98l7l6km72a5jlwngmvcj6xz2yv33cf8j0jdsetflek+10000000 \
   \
   --tx-in cea4b3f0dd6d815cc028c0f6e790bf719f49c334108ca1014e4794fc59344093#1 \
   --tx-in-script-file $SCRIPT \
