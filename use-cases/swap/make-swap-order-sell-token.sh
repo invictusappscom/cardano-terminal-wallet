@@ -4,20 +4,19 @@
 ROOT_DIR=../..
 
 . utils/create-policy.sh
+SWAPTOKEN_POLICY_ID_NAME=${POLICY_ID}.${TOKEN_NAME}
+RTOKEN_POLICY_ID_NAME=${POLICY_ID}.REV2
 
 DIR="$ROOT_DIR/output/$WALLET"
 MY_ADDR=$(cat $DIR/payment.addr)
 CHANGE_ADDR=$MY_ADDR
 SCRIPT="$ROOT_DIR/plutus/AlwaysSucceeds.plutus"
 SCRIPT_ADDR=$(${CARDANO_CLI_PATH} address build --payment-script-file $SCRIPT $NETWORK)
-echo "Script address: $SCRIPT_ADDR"
 
 # Datum is address
 DATUM_HASH=$(${CARDANO_CLI_PATH} transaction hash-script-data --script-data-value '["'${MY_ADDR:0:64}'","'${MY_ADDR:64}'"]')
-echo "Datum hash: $DATUM_HASH"
 
 . $ROOT_DIR/balance-addr.sh $MY_ADDR
-read -p "Enter RTOKEN PolicyID.Name: " RTOKEN_POLICY_ID_NAME
 read -p "Enter amount of RTOKEN for send: " RTOKEN_VALUE
 read -p "Enter amount of RTOKEN for change: " CHANGE_RTOKEN_VALUE
 read -p "Enter amount of SwapToken for send: " SWAP_TOKEN_VALUE
@@ -32,7 +31,6 @@ done
 
 # Format output tx
 ADA_VALUE=1900000
-SWAPTOKEN_POLICY_ID_NAME=${POLICY_ID}.${TOKEN_NAME}
 TX_OUTS=(--tx-out $SCRIPT_ADDR+$ADA_VALUE+"$SWAP_TOKEN_VALUE $SWAPTOKEN_POLICY_ID_NAME"+"$RTOKEN_VALUE $RTOKEN_POLICY_ID_NAME")
 TX_OUT_CHANGE=(--tx-out $CHANGE_ADDR+$ADA_VALUE+"$CHANGE_SWAP_TOKEN_VALUE $SWAPTOKEN_POLICY_ID_NAME"+"$CHANGE_RTOKEN_VALUE $RTOKEN_POLICY_ID_NAME")
 

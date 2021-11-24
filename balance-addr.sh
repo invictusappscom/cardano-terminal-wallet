@@ -1,10 +1,10 @@
 #!/bin/bash
-PATH=
+PROJECT_PATH=
 if [ -n "$ROOT_DIR" ]; then
-PATH=$ROOT_DIR/
+PROJECT_PATH=$ROOT_DIR/
 fi
 
-source ${PATH}.env
+source ${PROJECT_PATH}.env
 
 ADDR=$1
 if [ -z "$ADDR" ];then
