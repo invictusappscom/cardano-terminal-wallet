@@ -69,6 +69,7 @@ ${CARDANO_CLI_PATH} query utxo $NETWORK --address $MY_ADDR
 read -p "Enter UTxO from above list: " MY_UTXO
 read -p "Enter recepient address: " RCPT_ADDR
 
+# --metadata-json-file $TOKEN_META \
 ## Build tx from address
 echo "Building Mint Tx ..."
 ${CARDANO_CLI_PATH} transaction build \

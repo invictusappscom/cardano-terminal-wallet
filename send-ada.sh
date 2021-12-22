@@ -14,16 +14,30 @@ CHANGE_ADDR=$MY_ADDR
 
 ${CARDANO_CLI_PATH} query utxo $NETWORK --address $MY_ADDR
 
-read -p "Enter UTxO from above list: " MY_UTXO
+read -p "Enter one or more UTxOs from above list (space separated): " MY_UTXOS
 read -p "Enter recepient address: " RCPT_ADDR
 read -p "Enter amount of lovelace: " LOVELACE
+read -p "Enter amount of tokens and policy id for change (for no change just Enter): " CHANGE_TOKEN_VALUE
+
+# Format all input tx
+for MY_UTXO in $MY_UTXOS
+do
+    TX_INS="--tx-in $MY_UTXO $TX_INS"
+done
+
+# Format ouput tx
+TX_OUTS=(--tx-out $RCPT_ADDR+$LOVELACE)
+if [ ! -z $CHANGE_TOKEN_VALUE ]; then
+ TX_OUT_CHANGE=(--tx-out $CHANGE_ADDR+1400000+"$CHANGE_TOKEN_VALUE")
+fi
 
 ## Build tx from address
+set -x
 echo "Building Tx ..."
 ${CARDANO_CLI_PATH} transaction build \
 --alonzo-era \
---tx-in $MY_UTXO \
---tx-out $RCPT_ADDR+$LOVELACE \
+$TX_INS \
+"${TX_OUTS[@]}" "${TX_OUT_CHANGE[@]}" \
 --change-address $CHANGE_ADDR \
 $NETWORK \
 --out-file tx.build

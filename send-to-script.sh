@@ -33,6 +33,7 @@ ${CARDANO_CLI_PATH} transaction build \
   --tx-in $MY_UTXO \
   --tx-out $SCRIPT_ADDR+$LOVELACE \
   --tx-out-datum-hash $DATUM_HASH \
+  --metadata-json-file $TOKEN_META \
   --change-address $CHANGE_ADDR \
   --out-file tx.build
 echo "Done."
