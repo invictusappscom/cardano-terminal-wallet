@@ -10,7 +10,7 @@ read -p "Wallet name from list: " WALLET
 set -e
 
 DIR="output/$WALLET"
-MY_ADDR=$(cat $DIR/payment.addr)
+MY_ADDR=$(cat $DIR/payment-1.addr)
 CHANGE_ADDR=$MY_ADDR
 
 ${CARDANO_CLI_PATH} query utxo $NETWORK --address $MY_ADDR
@@ -35,6 +35,7 @@ fi
 
 ## Build tx from address
 echo "Building Tx ..."
+set -x
 ${CARDANO_CLI_PATH} transaction build \
 --alonzo-era \
 $TX_INS \
@@ -42,7 +43,6 @@ $TX_INS \
 --change-address $CHANGE_ADDR \
 $NETWORK \
 --out-file tx.build
-set +x
 echo "Done."
 
 # Sign tx

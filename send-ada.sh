@@ -9,7 +9,7 @@ read -p "Wallet name from list: " WALLET
 set -e
 
 DIR="output/$WALLET"
-MY_ADDR=$(cat $DIR/payment.addr)
+MY_ADDR=$(cat $DIR/payment-0.addr)
 CHANGE_ADDR=$MY_ADDR
 
 ${CARDANO_CLI_PATH} query utxo $NETWORK --address $MY_ADDR
@@ -46,11 +46,16 @@ echo "Done."
 # Sign tx
 echo "Sign Tx ..."
 ${CARDANO_CLI_PATH} transaction sign \
---signing-key-file $DIR/payment.skey \
+--signing-key-file $DIR/payment-0.skey \
 --tx-body-file tx.build \
 --out-file tx.sign
 echo "Done."
 
 # Submit tx
 echo "Submiting Tx ..."
-${CARDANO_CLI_PATH} transaction submit $NETWORK --tx-file tx.sign
+#${CARDANO_CLI_PATH} transaction submit $NETWORK --tx-file tx.sign
+
+TX_ID=$(${CARDANO_CLI_PATH} transaction txid --tx-file tx.sign)
+
+echo "Transaction Id"
+echo "https://testnet.cardanoscan.io/transaction/$TX_ID"

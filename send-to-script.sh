@@ -11,7 +11,7 @@ set -e
 #WALLET=zarko
 
 DIR="output/$WALLET"
-MY_ADDR=$(cat $DIR/payment.addr)
+MY_ADDR=$(cat $DIR/payment-0.addr)
 CHANGE_ADDR=$MY_ADDR
 SCRIPT=plutus/AlwaysSucceeds.plutus
 SCRIPT_ADDR=$(${CARDANO_CLI_PATH} address build --payment-script-file $SCRIPT $NETWORK)
@@ -26,6 +26,7 @@ LOVELACE=5400011
 
 ## Build tx from address
 echo "Building Tx ..."
+#  --metadata-json-file $TOKEN_META \
 set -xe
 ${CARDANO_CLI_PATH} transaction build \
   --alonzo-era \
@@ -33,7 +34,6 @@ ${CARDANO_CLI_PATH} transaction build \
   --tx-in $MY_UTXO \
   --tx-out $SCRIPT_ADDR+$LOVELACE \
   --tx-out-datum-hash $DATUM_HASH \
-  --metadata-json-file $TOKEN_META \
   --change-address $CHANGE_ADDR \
   --out-file tx.build
 echo "Done."
@@ -41,14 +41,14 @@ echo "Done."
 # Sign tx
 echo "Sign Tx ..."
 ${CARDANO_CLI_PATH} transaction sign \
---signing-key-file $DIR/payment.skey \
+--signing-key-file $DIR/payment-0.skey \
 --tx-body-file tx.build \
 --out-file tx.sign
 echo "Done."
 
 # Submit tx
 echo "Submiting Tx ..."
-${CARDANO_CLI_PATH} transaction submit $NETWORK --tx-file tx.sign
+#${CARDANO_CLI_PATH} transaction submit $NETWORK --tx-file tx.sign
 
 sleep 30
 ./balance-addr.sh $SCRIPT_ADDR 
